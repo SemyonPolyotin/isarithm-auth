@@ -1,0 +1,55 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+        lombokVersion = '1.16.20'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.projectlombok:lombok:${lombokVersion}")
+    }
+}
+
+ext {
+    jetbrainsAnnotationVesion = '16.0.2'
+    junitVersion = '5.2.0'
+    postgresqlVersion = '42.2.5'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = 'com.isarithm.auth'
+sourceCompatibility = 1.8
+
+jar {
+    baseName = 'isarithm-auth'
+    version = '0.0.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-jersey:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile("org.postgresql:postgresql:${postgresqlVersion}");
+
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    compileOnly("org.jetbrains:annotations:${jetbrainsAnnotationVesion}")
+
+    testCompile("org.jetbrains:annotations:${jetbrainsAnnotationVesion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+        exclude group: "org.junit"
+    }
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
