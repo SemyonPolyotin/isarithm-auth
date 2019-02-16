@@ -11,13 +11,9 @@ import java.util.UUID;
 public class UserResponse {
 	private UUID id;
 	private String username;
-	private String email;
-	private String password;
 
 	public UserResponse(User user) {
 		this.id = user.getId();
 		this.username = user.getUsername();
-		this.email = user.getEmail();
-		this.password = user.getPassword();
 	}
 }
