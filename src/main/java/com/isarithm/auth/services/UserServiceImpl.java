@@ -1,7 +1,9 @@
 package com.isarithm.auth.services;
 
 import com.isarithm.auth.domain.User;
+import com.isarithm.auth.exception.UserCredentialsException;
 import com.isarithm.auth.repository.UserRepository;
+import com.isarithm.auth.web.model.UserCredentialsRequest;
 import com.isarithm.auth.web.model.UserRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,30 @@ public class UserServiceImpl implements UserService {
 		if (userRequest.getUsername() != null) user.setUsername(userRequest.getUsername());
 		if (userRequest.getPassword() != null) user.setPassword(userRequest.getPassword());
 		return userRepository.save(user);
+	}
+
+	@Override
+	public User updateCredentials(UUID userId, UserCredentialsRequest userRequest) throws Exception {
+		User user = this.getUserById(userId);
+		String salt = RandomStringUtils.randomAlphanumeric(10);
+		MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+		messageDigest.update((userRequest.getPassword() + salt).getBytes(StandardCharsets.UTF_8));
+		user.setPassword(DatatypeConverter.printHexBinary(messageDigest.digest()));
+		user.setSalt(salt);
+		return this.userRepository.save(user);
+	}
+
+	@Override
+	public User checkCredentials(String username, String password) throws UserCredentialsException {
+		try {
+			User user = getUserByUsername(username);
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+			messageDigest.update((password + user.getSalt()).getBytes(StandardCharsets.UTF_8));
+			return DatatypeConverter.printHexBinary(messageDigest.digest()).equals(user.getPassword()) ? user : null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new UserCredentialsException();
+		}
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -29,4 +31,7 @@ public class User {
 
 	@Column(name = "users_salt")
 	private String salt;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<UserToken> userTokens = new ArrayList<>();
 }

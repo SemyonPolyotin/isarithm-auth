@@ -61,7 +61,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.POST, value = "")
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserResponse createUser(@RequestBody UserRequest userRequest,
-								   HttpServletResponse response) {
+								   HttpServletResponse response) throws Exception {
 		User user = userService.createUser(userRequest);
 		response.addHeader(HttpHeaders.LOCATION, baseUri + "/" + user.getId());
 		return new UserResponse(user);
