@@ -13,6 +13,5 @@ public interface UserRepository
 	Optional<User> getUserById(UUID uuid);
 	void deleteUserById(UUID uuid);
 	User getUserByUsernameIgnoreCase(String username);
-	User getUserByEmailIgnoreCase(String regEmail);
 	Page<User> getUsersByUsernameContainingIgnoreCase(String username, Pageable pageable);
 }

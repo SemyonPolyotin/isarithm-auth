@@ -7,7 +7,7 @@ Authorization Java Spring REST web service for Isarithm
     $ cd isarithm-auth
     $ gradle bootJar
     $ scp ./build/libs/isarithm-auth.jar isarithm@vds1.isarithm.ru:/var/www/isarithm/isarithm-auth.jar
-    $ ssh -f isarithm@vds1.isarithm.ru 'nohup java -Dserver.port=4001 -jar /var/www/isarithm/isarithm-auth.jar --spring.profiles.active=prod >/dev/null 2>&1 &'
+    $ ssh -f isarithm@vds1.isarithm.ru 'nohup java -Dserver.port=4002 -jar /var/www/isarithm/isarithm-auth.jar --spring.profiles.active=prod >/dev/null 2>&1 &'
 ```
 
 ## Restart

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,25 +45,17 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/by")
-	public UserResponse getUserBy(@RequestParam(value = "username", required = false) String username,
-								  @RequestParam(value = "email", required = false) String email,
-								  ServletServerHttpResponse response) {
+	public ResponseEntity<UserResponse> getUserBy(@RequestParam(value = "username", required = false) String username,
+												 ServletServerHttpResponse response) {
 		User user;
-		if (username != null && username.length() > 0)
+		if (username != null && username.length() > 0) {
 			user = userService.getUserByUsername(username);
-		else if (email != null && email.length() > 0)
-			user = userService.getUserByEmail(email);
-		else {
-			response.setStatusCode(HttpStatus.BAD_REQUEST);
-			return null;
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 
-		if (user != null) {
-			return new UserResponse(user);
-		} else {
-			response.setStatusCode(HttpStatus.NO_CONTENT);
-			return null;
-		}
+		if (user != null) return ResponseEntity.ok(new UserResponse(user));
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "")
